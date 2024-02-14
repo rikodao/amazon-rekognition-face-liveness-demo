@@ -5,16 +5,17 @@ from infra.facelivenessbackend.gateway.topology import FaceLivenessGateway
 from json import dumps
 from infra.interfaces import IRflStack
 from constructs import Construct
+from infra.cropface.topology import CropFace
 
 class FaceLiveness(Construct):
-  def __init__(self, scope: Construct, id: builtins.str, rfl_stack:IRflStack) -> None:
+  def __init__(self, scope: Construct, id: builtins.str, rfl_stack:IRflStack, cropface: CropFace) -> None:
     super().__init__(scope, id)
     
     '''
     Declare the function set that powers the backend
     '''
     self.functions = FaceLivenessFunctionSet(self,'Functions',
-      rfl_stack=rfl_stack)
+      rfl_stack=rfl_stack, cropface=cropface)
 
     '''
     Create an Amazon API Gateway 
@@ -24,4 +25,6 @@ class FaceLiveness(Construct):
     self.api_gateway.bind_start_liveness_session(self.functions)
 
     self.api_gateway.bind_liveness_session_result(self.functions)
+    
+    self.api_gateway.bind_upload_signed_url(self.functions)
 

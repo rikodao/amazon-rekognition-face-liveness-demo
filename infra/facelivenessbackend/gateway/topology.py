@@ -35,7 +35,18 @@ class FaceLivenessGateway(Construct):
 
   def rest_api_url(self):
         return self.rest_api.url
-  
+
+
+  def bind_upload_signed_url(self, functions: FaceLivenessFunctionSet) -> api.ProxyResource:
+      """
+      Configure the service integration
+      :param integration_http_method: The http method 
+      """
+      self.__bind_lambda_function(
+          "uploadsignedurl", functions.upload_signed_url.function, "GET"
+      )
+
+
 
   def bind_start_liveness_session(self, functions: FaceLivenessFunctionSet) -> api.ProxyResource:
       """

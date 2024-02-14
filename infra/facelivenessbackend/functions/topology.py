@@ -1,11 +1,11 @@
-
-from infra.facelivenessbackend.functions.definitions import FaceLivenessStartLivenessSession,FaceLivenessSessionResult
+from infra.facelivenessbackend.functions.definitions import FaceLivenessStartLivenessSession,FaceLivenessSessionResult,UploadSignUrl
 from infra.interfaces import IRflStack
 import aws_cdk as core
 from constructs import Construct
+from infra.cropface.topology import CropFace
 
 class FaceLivenessFunctionSet(Construct):
-  def __init__(self, scope: Construct, id:str, rfl_stack:IRflStack, **kwargs) -> None:
+  def __init__(self, scope: Construct, id:str, rfl_stack:IRflStack, cropface: CropFace, **kwargs) -> None:
     super().__init__(scope, id)
 
     '''
@@ -14,6 +14,7 @@ class FaceLivenessFunctionSet(Construct):
     default_environment_var = {
       'REGION': core.Stack.of(self).region,
       'rfl_stack_NAME': rfl_stack.rfl_stack_name,
+      'UPLOAD_BUCKET': cropface.bucket.bucket_name
     }
 
     
@@ -22,7 +23,9 @@ class FaceLivenessFunctionSet(Construct):
 
     self.liveness_session_result = FaceLivenessSessionResult(self,'FaceLivenessSessionResult',
       rfl_stack=rfl_stack, env=default_environment_var)
-    
+
+    self.upload_signed_url = UploadSignUrl(self,'UploadSignUrl',
+      rfl_stack=rfl_stack, env=default_environment_var)
     
 
     '''
