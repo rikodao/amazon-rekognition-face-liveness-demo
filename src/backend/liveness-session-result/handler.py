@@ -1,5 +1,6 @@
 import boto3
 import io
+import os
 import sys
 import base64
 from logging import Logger
@@ -25,7 +26,8 @@ def get_session_results(event):
         print(response)
         print("response")
         imageStream = io.BytesIO(response['ReferenceImage']['Bytes'])
-        s3_client.upload_fileobj(imageStream, "referenceImage/" + event['key'])
+        s3_client.upload_fileobj(imageStream, os.getenv('FACELIVENESS_BUCKET'),"referenceImage/" + event['sessionid'] + '.jpg')
+        imageStream = io.BytesIO(response['ReferenceImage']['Bytes'])
         referenceImage = base64.b64encode(imageStream.getvalue())
         response['ReferenceImage']['Bytes'] = referenceImage
 

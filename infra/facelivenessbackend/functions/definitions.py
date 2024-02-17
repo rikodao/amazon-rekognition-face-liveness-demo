@@ -51,6 +51,9 @@ class FaceLivenessSessionResult(FaceLivenessBackendFunction):
   def __init__(self, scope: Construct, id:str, rfl_stack:IRflStack,env:Mapping[str,str]={}, **kwargs) -> None:
     super().__init__(scope, id, rfl_stack=rfl_stack, env=env)
 
+    self.function.role.add_managed_policy(
+      policy=iam.ManagedPolicy.from_aws_managed_policy_name('AmazonS3FullAccess'))
+
   @property
   def source_directory(self)->str:
     return 'src/backend/liveness-session-result'
