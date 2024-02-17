@@ -15,7 +15,12 @@ def lambda_handler(event, context):
     print("******bucket_name********")
     print(bucket_name)
     print("******bucket_name********")
-    object_key = 'upload/'+ randomname(10) + ".jpg" # アップロードするオブジェクトのキーをランダム生成
+    key = event.get('queryStringParameters', {}).get('key')
+    print("******key********")
+    print(key)
+    print("******key********")
+
+    object_key = 'upload/'+ key + ".jpg" # アップロードするオブジェクトのキーをランダム生成
     expiration = 600  # 署名付きURLの有効期限を秒で指定
     print("******object_key********")
     print(object_key)
@@ -44,7 +49,10 @@ def lambda_handler(event, context):
     # return result
     return {
         'statusCode': 200,
-        'body': response
+        'body': json.dumps({'body': response}),
+        'headers': {
+            "Access-Control-Allow-Origin": "*"
+        }
     }
 
 if __name__ == "__main__":

@@ -43,7 +43,7 @@ class FaceLivenessGateway(Construct):
       :param integration_http_method: The http method 
       """
       self.__bind_lambda_function(
-          "uploadsignedurl", functions.upload_signed_url.function, "GET"
+          "uploadsignedurl", functions.upload_signed_url.function, "GET", True
       )
 
 
@@ -67,10 +67,20 @@ class FaceLivenessGateway(Construct):
       )
 
 
-  def __bind_lambda_function(self,resource_name: str,functions: FaceLivenessFunctionSet,integration_http_method: str,) -> None:
+  def bind_get_compareface_result(self, functions: FaceLivenessFunctionSet) -> api.ProxyResource:
+      """
+      Configure the service integration
+      :param integration_http_method: The http method 
+      """
+      self.__bind_lambda_function(
+          "getcomparefaceresult", functions.get_compareface_result.function, "GET"
+      )
+
+
+  def __bind_lambda_function(self,resource_name: str,functions: FaceLivenessFunctionSet,integration_http_method: str,proxy: bool=False) -> None:
       integration = api.LambdaIntegration(
           functions,
-          proxy=False,
+          proxy=proxy,
           integration_responses=[
               api.IntegrationResponse(
                   status_code="200",
@@ -100,12 +110,15 @@ class FaceLivenessGateway(Construct):
 
       resource.add_method(
           http_method=integration_http_method,
+            request_parameters={
+                "method.request.querystring.pet": proxy  # 'pet'クエリ文字列パラメータを必須とする
+            },
           integration=integration,
           method_responses=[
               api.MethodResponse(
                   status_code="200",
                   response_parameters={
-                      "method.response.header.Access-Control-Allow-Origin": True
+                      "method.response.header.Access-Control-Allow-Origin": True,
                   },
               ),
               api.MethodResponse(

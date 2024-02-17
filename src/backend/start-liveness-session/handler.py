@@ -1,4 +1,5 @@
 import boto3
+import os
 from logging import Logger
 
 rek_client = boto3.client('rekognition')
@@ -14,8 +15,19 @@ def create_session():
     '''
     Get liveness session.
     '''
+    print('FACELIVENESS_BUCKET')
+    print(os.getenv('FACELIVENESS_BUCKET'))
+    print('FACELIVENESS_BUCKET')
     try:
-        response = rek_client.create_face_liveness_session()
+        
+        response = rek_client.create_face_liveness_session( 
+            # Settings={
+            #     'OutputConfig': {
+            #         'S3Bucket': os.getenv('FACELIVENESS_BUCKET'),
+            #         'S3KeyPrefix': 'faceliveness'
+            #    }
+            # },
+        )
         session_id = response.get("SessionId")
       
         return session_id

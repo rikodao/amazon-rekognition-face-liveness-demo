@@ -8,19 +8,21 @@ const videoConstraints = {
 
 
 
-export default () => {
+export default ({ sessionid }) => {
+    console.log(sessionid);
     const webcamRef = useRef(null);
     const [image, setImage] = useState(null);
     const [presignedURL, setPresignedURL] = useState(null);
     const endpoint = process.env.REACT_APP_ENV_API_URL ? process.env.REACT_APP_ENV_API_URL : ''
 
     const getPresignedUrl = async () => {
-        const response = await fetch(endpoint + 'uploadsignedurl');
+        const response = await fetch(endpoint + 'uploadsignedurl?' + new URLSearchParams({key: sessionid}));
         const data = await response.json();
         console.log("------ uploadsignedurl response ------");
         console.log(data)
         
         const url = data.body
+        console.log({url})
         setPresignedURL(url)
     }
 
@@ -66,7 +68,7 @@ export default () => {
             <header>
                 <h1>カメラアプリ</h1>
             </header>
-
+            SessionID: {sessionid}
             {(
                 <>
                     <div>

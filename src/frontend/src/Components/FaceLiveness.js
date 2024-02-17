@@ -5,29 +5,14 @@ import '@aws-amplify/ui-react/styles.css';
 import { FaceLivenessDetector } from '@aws-amplify/ui-react-liveness';
 
 
-function FaceLiveness({faceLivenessAnalysis}) {
-    const [loading, setLoading] = React.useState(true);
-    const [sessionId, setSessionId] = React.useState(null)
+function FaceLiveness({faceLivenessAnalysis, sessionid, setSessionid, loading}) {
+    
+    
    
 
     const endpoint = process.env.REACT_APP_ENV_API_URL ? process.env.REACT_APP_ENV_API_URL : ''
 
-    useEffect(() => {
-        /*
-         * API call to create the Face Liveness Session
-         */
-        const fetchCreateLiveness = async () => {
-            const response = await fetch(endpoint + 'createfacelivenesssession');
-            const data = await response.json();
-            setSessionId(data.sessionId)
-            setLoading(false);
-
-        };
-        fetchCreateLiveness();
-
-    },[])
-
-    /*
+   /*
    * Get the Face Liveness Session Result
    */
     const handleAnalysisComplete = async () => {
@@ -41,7 +26,7 @@ function FaceLiveness({faceLivenessAnalysis}) {
                     'Accept': 'application/json',
                     'Content-Type': 'application/json'
                 },
-                body: JSON.stringify({ sessionid: sessionId })
+                body: JSON.stringify({ sessionid: sessionid })
             }
 
         );
@@ -55,7 +40,7 @@ function FaceLiveness({faceLivenessAnalysis}) {
                 <Loader />
             ) : (
                 <FaceLivenessDetector
-                    sessionId={sessionId}
+                    sessionId={sessionid}
                     region="us-east-1"
                     onAnalysisComplete={handleAnalysisComplete}
                     onError={(error) => {
