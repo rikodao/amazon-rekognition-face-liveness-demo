@@ -111,7 +111,7 @@ class FaceLivenessGateway(Construct):
       resource.add_method(
           http_method=integration_http_method,
             request_parameters={
-                "method.request.querystring.pet": proxy  # 'pet'クエリ文字列パラメータを必須とする
+                "method.request.querystring.sessionid": proxy  # 'sessionid'クエリ文字列パラメータを必須とする
             },
           integration=integration,
           method_responses=[
