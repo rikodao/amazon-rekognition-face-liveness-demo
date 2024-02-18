@@ -73,7 +73,7 @@ class FaceLivenessGateway(Construct):
       :param integration_http_method: The http method 
       """
       self.__bind_lambda_function(
-          "getcomparefaceresult", functions.get_compareface_result.function, "GET"
+          "getcomparefaceresult", functions.get_compareface_result.function, "GET", True
       )
 
 

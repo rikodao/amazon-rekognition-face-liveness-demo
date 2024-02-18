@@ -28,3 +28,5 @@ class FaceLiveness(Construct):
     
     self.api_gateway.bind_upload_signed_url(self.functions)
 
+    self.api_gateway.bind_get_compareface_result(self.functions)
+

@@ -29,7 +29,10 @@ class FaceLivenessFunctionSet(Construct):
 
     self.upload_signed_url = UploadSignUrl(self,'UploadSignUrl',
       rfl_stack=rfl_stack, env=default_environment_var)
-        
+    
+    self.get_compareface_result = GetComparefaceResult(self,'getComparefaceResult',
+          rfl_stack=rfl_stack, env=default_environment_var)
+    
 
     '''
     Grant additional permissions...
