@@ -24,9 +24,13 @@ export default ({ image, setImage, sessionid }) => {
         console.log({ url })
         setPresignedURL(url)
     }
-
+    useEffect(() => {
+        getPresignedUrl()
+  
+    },[sessionid])
+  
     
-    getPresignedUrl()
+
 
     /*
    * Get the Face Liveness Session Result

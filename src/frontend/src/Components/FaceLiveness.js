@@ -5,7 +5,7 @@ import '@aws-amplify/ui-react/styles.css';
 import { FaceLivenessDetector } from '@aws-amplify/ui-react-liveness';
 
 
-function FaceLiveness({faceLivenessAnalysis, sessionid, setSessionid, loading}) {
+function FaceLiveness({faceLivenessAnalysis, sessionid, loading}) {
     
     
    
