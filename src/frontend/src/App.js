@@ -23,6 +23,8 @@ function App() {
   const [faceLivenessAnalysis, setFaceLivenessAnalysis] = React.useState(null)
   const [sessionid, setSessionid] = React.useState()
   const [loading, setLoading] = React.useState(true);
+  const [image, setImage] = React.useState(null);
+
     useEffect(() => {
       /*
       * API call to create the Face Liveness Session
@@ -68,11 +70,11 @@ function App() {
           width="740px"
           maxWidth="740px"
         >
-          SessionID: {setSessionid}
+          SessionID: {sessionid}
            <Tabs
     defaultValue={'Tab 1'}
     items={[
-      { label: '本人確認書類アップロード', value: 'Tab 1', content: (<ImageUploader sessionid={sessionid} />) },
+      { label: '本人確認書類アップロード', value: 'Tab 1', content: (<ImageUploader image={image} setImage={setImage} sessionid={sessionid} />) },
       { label: 'FaceLiveness', value: 'Tab 2', content: (<>{faceLivenessAnalysis && faceLivenessAnalysis.Confidence ? (
         <ReferenceImage faceLivenessAnalysis={faceLivenessAnalysis} tryagain={tryagain}></ReferenceImage>
       ) :

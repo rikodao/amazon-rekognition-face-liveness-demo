@@ -8,10 +8,9 @@ const videoConstraints = {
 
 
 
-export default ({ sessionid }) => {
+export default ({image, setImage, sessionid }) => {
     console.log(sessionid);
     const webcamRef = useRef(null);
-    const [image, setImage] = useState(null);
     const [presignedURL, setPresignedURL] = useState(null);
     const endpoint = process.env.REACT_APP_ENV_API_URL ? process.env.REACT_APP_ENV_API_URL : ''
 
