@@ -1,4 +1,4 @@
-import { useRef, useState, useCallback } from "react";
+import { useRef, useState, useCallback,useEffect } from "react";
 import Webcam from "react-webcam";
 const videoConstraints = {
     width: 1280,
@@ -8,30 +8,34 @@ const videoConstraints = {
 
 
 
-export default ({image, setImage, sessionid }) => {
+export default ({ image, setImage, sessionid }) => {
     console.log(sessionid);
     const webcamRef = useRef(null);
     const [presignedURL, setPresignedURL] = useState(null);
     const endpoint = process.env.REACT_APP_ENV_API_URL ? process.env.REACT_APP_ENV_API_URL : ''
 
     const getPresignedUrl = async () => {
-        const response = await fetch(endpoint + 'uploadsignedurl?' + new URLSearchParams({key: sessionid}));
+        const response = await fetch(endpoint + 'uploadsignedurl?' + new URLSearchParams({ key: sessionid }));
         const data = await response.json();
         console.log("------ uploadsignedurl response ------");
         console.log(data)
-        
+
         const url = data.body
-        console.log({url})
+        console.log({ url })
         setPresignedURL(url)
     }
+
+    
+    getPresignedUrl()
 
     /*
    * Get the Face Liveness Session Result
    */
-    const handleUploadImagetoS3 = async (presignedURL, imageSrc) => {
+    const handleUploadImagetoS3 = async (imageSrc) => {
         /*
          * API call to get the Face Liveness Session result
          */
+
         const res = await fetch(imageSrc)
         const blob = await res.blob()
 
@@ -58,8 +62,7 @@ export default ({image, setImage, sessionid }) => {
         const imageSrc = webcamRef.current?.getScreenshot();
         if (imageSrc) {
             setImage(imageSrc);
-            getPresignedUrl()
-        }        
+        }
     }, [webcamRef]);
 
     return (
@@ -92,7 +95,7 @@ export default ({image, setImage, sessionid }) => {
                     <div>
                         <button
                             onClick={() => {
-                                handleUploadImagetoS3(presignedURL, image)
+                                handleUploadImagetoS3(image)
                             }}
                         >
                             送信
