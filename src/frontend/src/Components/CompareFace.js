@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { Loader } from '@aws-amplify/ui-react';
+import { Badge, Button, Card, Alert } from '@aws-amplify/ui-react';
 import '@aws-amplify/ui-react/styles.css';
 
 function CompareFaceResult({ idImage, faceLivenessAnalysis, sessionid }) {
@@ -26,21 +26,32 @@ function CompareFaceResult({ idImage, faceLivenessAnalysis, sessionid }) {
     return (
         <>
             <div>
-                <h2>Face Comparison Results</h2>
-                <div> ID Image: <img src={idImage} alt="Face 1" style={{ width: "200px", height: "200px" }} /></div>
+                <Alert variation="info">Check "ID Image" and image "FaceLiveness Image", and click "Send" button to check Similarity. </Alert>
+                <Card>
+                    <div> <Badge>ID Image</Badge> </div>
+                    <div> <img src={idImage} alt="Face 1" /></div>
+                </Card>
+                <Card>
+                    <div>
+                        <Badge>FaceLiveness Image</Badge> </div>
+                    <div>
+                        <img src={"data:image/jpeg;base64," + faceLivenessAnalysis?.ReferenceImage?.Bytes} alt="Face 2" />
+                    </div>
+                </Card>
                 <div>
-                    FaceLiveness Image:
-                    <img src={"data:image/jpeg;base64," + faceLivenessAnalysis?.ReferenceImage?.Bytes} alt="Face 2" style={{ width: "200px", height: "200px" }} />
-                </div>
-                <div>
-                    <button
+                    <Button
                         onClick={checkSimilarity}
                     >
-                        送信
-                    </button>
+                        Check
+                    </Button>
                 </div>
-
-                <p>Similarity Score: {similarityScore}%</p>
+                <Card>
+                    <Alert variation="success">
+                        <div>
+                            Similarity Score: {similarityScore}%
+                        </div>
+                    </Alert>
+                </Card>
             </div>
         </>
     );

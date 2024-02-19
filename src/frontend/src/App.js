@@ -12,6 +12,8 @@ import {
   View,
   Flex,
   Tabs,
+  Badge,
+  Alert,
 } from '@aws-amplify/ui-react';
 import '@aws-amplify/ui-react/styles.css';
 import awsexports from './aws-exports';
@@ -25,22 +27,22 @@ function App() {
   const [loading, setLoading] = React.useState(true);
   const [idImage, setIdImage] = React.useState(null);
 
-    useEffect(() => {
-      /*
-      * API call to create the Face Liveness Session
-      */
-      const fetchCreateLiveness = async () => {
-          const response = await fetch(endpoint + 'createfacelivenesssession');
-          const data = await response.json();
-          console.log("data.sessionid");
-          console.log(data.sessionId);
-          setSessionid(data.sessionId)
-          setLoading(false);
+  useEffect(() => {
+    /*
+    * API call to create the Face Liveness Session
+    */
+    const fetchCreateLiveness = async () => {
+      const response = await fetch(endpoint + 'createfacelivenesssession');
+      const data = await response.json();
+      console.log("data.sessionid");
+      console.log(data.sessionId);
+      setSessionid(data.sessionId)
+      setLoading(false);
 
-      };
-      fetchCreateLiveness();
+    };
+    fetchCreateLiveness();
 
-  },[])
+  }, [])
 
   const getfaceLivenessAnalysis = (faceLivenessAnalysis) => {
     if (faceLivenessAnalysis !== null) {
@@ -48,7 +50,7 @@ function App() {
     }
   }
 
-  const tryagain = () =>{
+  const tryagain = () => {
     setFaceLivenessAnalysis(null)
   }
 
@@ -70,19 +72,30 @@ function App() {
           width="740px"
           maxWidth="740px"
         >
-          SessionID: {sessionid}
-           <Tabs
-    defaultValue={'Tab 1'}
-    items={[
-      { label: '本人確認書類アップロード', value: 'Tab 1', content: (<ImageUploader image={idImage} setImage={setIdImage} sessionid={sessionid} />) },
-      { label: 'FaceLiveness', value: 'Tab 2', content: (<>{faceLivenessAnalysis && faceLivenessAnalysis.Confidence ? (
-        <ReferenceImage faceLivenessAnalysis={faceLivenessAnalysis} tryagain={tryagain}></ReferenceImage>
-      ) :
-        (<FaceLiveness faceLivenessAnalysis={getfaceLivenessAnalysis} sessionid={sessionid} loading={loading}/>)}</>) },
-      { label: '認証結果確認', value: 'Tab 3', content: (<CompareFace idImage={idImage} faceLivenessAnalysis={faceLivenessAnalysis} sessionid={sessionid} />) },
-    ]}
-  />
-          
+          <Badge>SessionID: {sessionid}</Badge>
+          <Tabs
+            defaultValue={'Tab 1'}
+            items={[
+              { label: 'Upload identity verification doc', value: 'Tab 1', content: (<ImageUploader image={idImage} setImage={setIdImage} sessionid={sessionid} />) },
+              {
+                label: 'FaceLiveness', value: 'Tab 2', content: (<>{faceLivenessAnalysis && faceLivenessAnalysis.Confidence ? (
+                  <ReferenceImage faceLivenessAnalysis={faceLivenessAnalysis} tryagain={tryagain}></ReferenceImage>
+                ) :
+                  (<FaceLiveness faceLivenessAnalysis={getfaceLivenessAnalysis} sessionid={sessionid} loading={loading} />)}</>)
+              },
+              {
+                label: 'Check Similarity', value: 'Tab 3', content: (<>
+                  {
+                    idImage && faceLivenessAnalysis && faceLivenessAnalysis.Confidence ?
+                      (<CompareFace idImage={idImage} faceLivenessAnalysis={faceLivenessAnalysis} sessionid={sessionid} />) :
+                      (<Alert variation="error">"You must upload image in former two step"</Alert>)
+                  }</>
+                )
+              }
+
+            ]}
+          />
+
 
         </View>
       </Flex>

@@ -1,11 +1,16 @@
-import { useRef, useState, useCallback,useEffect } from "react";
+import {
+    Image,
+    Button,
+    Alert,
+    Card
+} from '@aws-amplify/ui-react';
+import { useRef, useState, useCallback, useEffect } from "react";
 import Webcam from "react-webcam";
 const videoConstraints = {
     width: 1280,
     height: 720,
     facingMode: "user"
 };
-
 
 
 export default ({ image, setImage, sessionid }) => {
@@ -26,10 +31,10 @@ export default ({ image, setImage, sessionid }) => {
     }
     useEffect(() => {
         getPresignedUrl()
-  
-    },[sessionid])
-  
-    
+
+    }, [sessionid])
+
+
 
 
     /*
@@ -72,39 +77,42 @@ export default ({ image, setImage, sessionid }) => {
     return (
         <>
             <header>
-                <h1>カメラアプリ</h1>
+                <Alert variation="info">Click "Capture" button to Take photo of your identity verification document with face photo.Then "Send" button to upload file. </Alert>
             </header>
-            SessionID: {sessionid}
             {(
                 <>
-                    <div>
-                        <Webcam
-                            audio={false}
-                            width={540}
-                            height={360}
-                            ref={webcamRef}
-                            screenshotFormat="image/jpeg"
-                            videoConstraints={videoConstraints}
-                        />
-                    </div>
-                    <button onClick={capture}>キャプチャ</button>
+                    <Card>
+                        <div>
+                            <Webcam
+                                audio={false}
+                                width={540}
+                                height={360}
+                                ref={webcamRef}
+                                screenshotFormat="image/jpeg"
+                                videoConstraints={videoConstraints}
+                            />
+                        </div>
+                        <Button onClick={capture}>Capture</Button>
+                    </Card>
                 </>
             )}
             {image && (
                 <>
-                    <div>
-                        <img src={image} alt="Screenshot" />
-                    </div>
+                    <Card>
+                        <div>
+                            <Image src={image} alt="Screenshot" />
+                        </div>
 
-                    <div>
-                        <button
-                            onClick={() => {
-                                handleUploadImagetoS3(image)
-                            }}
-                        >
-                            送信
-                        </button>
-                    </div>
+                        <div>
+                            <Button
+                                onClick={() => {
+                                    handleUploadImagetoS3(image)
+                                }}
+                            >
+                                Send
+                            </Button>
+                        </div>
+                    </Card>
                 </>
             )}
         </>
