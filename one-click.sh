@@ -206,7 +206,7 @@ do
       exit 1
     fi
   fi
-  zip -r ../$f.zip . > zip.log
+  zip -r ../$f.zip . -x src/frontend/node_modules/* > zip.log
   color_green
   echo Zipped `wc -l zip.log | cut -d ' ' -f 1` files.
   color_reset
