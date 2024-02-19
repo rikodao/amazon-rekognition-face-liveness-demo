@@ -143,5 +143,5 @@ class FaceLivenessFrontEndBuildStatus(Construct):
                                                                           "Payload": input
                                                                       })
                                               )
-        CfnOutput(self, id="RFL-Web-App-URL",
-                  value="https://main."+amplifyApp.amplify.app_id+".amplifyapp.com", export_name="RFL-Web-App-URL")
+        CfnOutput(self, id="REACT-APP-ENV-API-URL",
+                  value="https://main."+amplifyApp.amplify.app_id+".amplifyapp.com", export_name="REACT-APP-ENV-API-URL")
