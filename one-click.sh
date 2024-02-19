@@ -206,7 +206,7 @@ do
       exit 1
     fi
   fi
-  zip -r ../$f.zip . -x src/frontend/node_modules/* > zip.log
+  zip -r ../$f.zip .  > zip.log
   color_green
   echo Zipped `wc -l zip.log | cut -d ' ' -f 1` files.
   color_reset
@@ -276,5 +276,8 @@ echo "Deploying Stack "
 echo "===================================="
 color_reset
 
+mv src/frontend/node_modules src/
 
 CDK_REGION=S3_REGION cdk deploy -a ./app.py --require-approval never
+
+ mv src/node_modules src/frontend/ 
