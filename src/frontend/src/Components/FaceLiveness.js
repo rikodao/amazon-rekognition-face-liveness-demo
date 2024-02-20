@@ -1,5 +1,4 @@
 import React from "react";
-import { useEffect } from "react";
 import { Loader } from '@aws-amplify/ui-react';
 import '@aws-amplify/ui-react/styles.css';
 import { FaceLivenessDetector } from '@aws-amplify/ui-react-liveness';
@@ -31,6 +30,7 @@ function FaceLiveness({faceLivenessAnalysis, sessionid, loading}) {
 
         );
         const data = await response.json();
+        alert(`Confidence Score is ${data.body.Confidence}%. `)
         faceLivenessAnalysis(data.body)
     };
 

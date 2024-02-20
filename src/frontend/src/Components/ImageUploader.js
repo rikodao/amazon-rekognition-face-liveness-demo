@@ -14,7 +14,6 @@ const videoConstraints = {
 
 
 export default ({ image, setImage, sessionid }) => {
-    console.log(sessionid);
     const webcamRef = useRef(null);
     const [presignedURL, setPresignedURL] = useState(null);
     const endpoint = process.env.REACT_APP_ENV_API_URL ? process.env.REACT_APP_ENV_API_URL : ''
@@ -81,7 +80,7 @@ export default ({ image, setImage, sessionid }) => {
             </header>
             {(
                 <>
-                    <Card>
+                    <Card variation="elevated">
                         <div>
                             <Webcam
                                 audio={false}
@@ -98,7 +97,7 @@ export default ({ image, setImage, sessionid }) => {
             )}
             {image && (
                 <>
-                    <Card>
+                    <Card variation="elevated">
                         <div>
                             <Image src={image} alt="Screenshot" />
                         </div>

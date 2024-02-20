@@ -34,8 +34,6 @@ function App() {
     const fetchCreateLiveness = async () => {
       const response = await fetch(endpoint + 'createfacelivenesssession');
       const data = await response.json();
-      console.log("data.sessionid");
-      console.log(data.sessionId);
       setSessionid(data.sessionId)
       setLoading(false);
 
