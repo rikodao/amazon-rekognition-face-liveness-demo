@@ -2,7 +2,9 @@ import {
     Image,
     Button,
     Alert,
-    Card
+    Card,
+    View,
+    SelectField
 } from '@aws-amplify/ui-react';
 import { useRef, useState, useCallback, useEffect } from "react";
 import Webcam from "react-webcam";
@@ -14,9 +16,40 @@ const videoConstraints = {
 
 
 export default ({ image, setImage, sessionid }) => {
+    const endpoint = process.env.REACT_APP_ENV_API_URL ? process.env.REACT_APP_ENV_API_URL : ''
     const webcamRef = useRef(null);
     const [presignedURL, setPresignedURL] = useState(null);
-    const endpoint = process.env.REACT_APP_ENV_API_URL ? process.env.REACT_APP_ENV_API_URL : ''
+    const [deviceId, setDeviceId] = useState(videoConstraints);
+    const [devices, setDevices] = useState([]);
+
+    const handleDevices = useCallback(
+        mediaDevices =>
+            setDevices(mediaDevices.filter(({ kind }) => kind === "videoinput")),
+        [setDevices]
+    );
+
+    useEffect(
+        () => {
+            navigator.mediaDevices.enumerateDevices().then(handleDevices);
+        },
+        [handleDevices]
+    );
+    const cameraSelector = () => {
+        const option = devices.map((device) => <option value={device.deviceId}>{device.label}</option>)
+
+        return (
+            <SelectField
+                label="Select your camera device"
+                value={deviceId.deviceId}
+                onChange={(e) => {
+                    setDeviceId({...videoConstraints, deviceId: e.target.value})
+            }}
+                >
+                {option}
+            </SelectField>
+            
+        )
+    }
 
     const getPresignedUrl = async () => {
         const response = await fetch(endpoint + 'uploadsignedurl?' + new URLSearchParams({ key: sessionid }));
@@ -80,38 +113,43 @@ export default ({ image, setImage, sessionid }) => {
             </header>
             {(
                 <>
-                    <Card variation="elevated">
-                        <div>
-                            <Webcam
-                                audio={false}
-                                width={540}
-                                height={360}
-                                ref={webcamRef}
-                                screenshotFormat="image/jpeg"
-                                videoConstraints={videoConstraints}
-                            />
-                        </div>
-                        <Button onClick={capture}>Capture</Button>
-                    </Card>
+                    <View as="div" borderRadius="6px" boxShadow="3px 3px 5px 6px var(--amplify-colors-neutral-60)">
+                        <Card variation="elevated">
+                            <div>
+                                <Webcam
+                                    audio={false}
+                                    width={540}
+                                    height={360}
+                                    ref={webcamRef}
+                                    screenshotFormat="image/jpeg"
+                                    videoConstraints={deviceId}
+                                />
+                            </div>
+                            <div>{cameraSelector()}</div>
+                            <Button onClick={capture}>Capture</Button>
+                        </Card>
+                    </View>
                 </>
             )}
             {image && (
                 <>
-                    <Card variation="elevated">
-                        <div>
-                            <Image src={image} alt="Screenshot" />
-                        </div>
+                    <View as="div" borderRadius="6px" boxShadow="3px 3px 5px 6px var(--amplify-colors-neutral-60)">
+                        <Card variation="elevated">
+                            <div>
+                                <Image src={image} alt="Screenshot" />
+                            </div>
 
-                        <div>
-                            <Button
-                                onClick={() => {
-                                    handleUploadImagetoS3(image)
-                                }}
-                            >
-                                Send
-                            </Button>
-                        </div>
-                    </Card>
+                            <div>
+                                <Button
+                                    onClick={() => {
+                                        handleUploadImagetoS3(image)
+                                    }}
+                                >
+                                    Send
+                                </Button>
+                            </div>
+                        </Card>
+                    </View>
                 </>
             )}
         </>
