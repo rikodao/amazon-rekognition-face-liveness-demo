@@ -1,5 +1,5 @@
-import  { useState } from "react";
-import { Badge, Button, Card, Alert } from '@aws-amplify/ui-react';
+import { useState } from "react";
+import { Badge, Button, Card, Alert, View } from '@aws-amplify/ui-react';
 import '@aws-amplify/ui-react/styles.css';
 
 function CompareFaceResult({ idImage, faceLivenessAnalysis, sessionid }) {
@@ -22,8 +22,8 @@ function CompareFaceResult({ idImage, faceLivenessAnalysis, sessionid }) {
     };
 
     const resultComponet = (similarityScore, croppedImageUrl) => {
-        if (similarityScore==null) return <></>
-        
+        if (similarityScore == null) return <></>
+
         return (<><Card variation="elevated">
             <Alert variation="success">
                 <div>
@@ -46,17 +46,21 @@ function CompareFaceResult({ idImage, faceLivenessAnalysis, sessionid }) {
         <>
             <div>
                 <Alert variation="info">Check "ID Image" and image "FaceLiveness Image", and click "Send" button to check Similarity. </Alert>
-                <Card variation="elevated">
-                    <div> <Badge>ID Image</Badge> </div>
-                    <div> <img src={idImage} alt="Face 1" /></div>
-                </Card>
-                <Card variation="elevated">
-                    <div>
-                        <Badge>FaceLiveness Image</Badge> </div>
-                    <div>
-                        <img src={"data:image/jpeg;base64," + faceLivenessAnalysis?.ReferenceImage?.Bytes} alt="Face 2" />
-                    </div>
-                </Card>
+                <View as="div" borderRadius="6px" boxShadow="3px 3px 5px 6px var(--amplify-colors-neutral-60)">
+                    <Card variation="elevated">
+                        <div> <Badge>ID Image</Badge> </div>
+                        <div> <img src={idImage} alt="Face 1" /></div>
+                    </Card>
+                </View>
+                <View as="div" borderRadius="6px" boxShadow="3px 3px 5px 6px var(--amplify-colors-neutral-60)">
+                    <Card variation="elevated">
+                        <div>
+                            <Badge>FaceLiveness Image</Badge> </div>
+                        <div>
+                            <img src={"data:image/jpeg;base64," + faceLivenessAnalysis?.ReferenceImage?.Bytes} alt="Face 2" />
+                        </div>
+                    </Card>
+                </View>
                 <div>
                     <Button
                         onClick={checkSimilarity}
