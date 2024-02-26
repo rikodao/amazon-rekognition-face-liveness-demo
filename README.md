@@ -1,15 +1,13 @@
-# Amazon Rekognition Face Liveness
+# Amazon Rekognition online identity valification
 
-A sample code to implement Amazon Rekognition Face Liveness to detect real users and deter bad actors using spoofs in seconds during facial verification.
+A sample code to implement online identity valification flow with Amazon Rekognition.
 
-## What is Amazon Rekognition Face Liveness?
-[Amazon Rekognition Face Liveness](https://aws.amazon.com/rekognition/face-liveness/) helps you verify that a user going through facial verification is physically present in front of a camera. It detects spoof attacks presented to a camera or trying to bypass a camera. Users can complete a Face Liveness check by taking a short video selfie where they follow a series of prompts intended to verify their presence.
+This flow use Detectface Compareface and Face Liveness to detect real users and deter bad actors using spoofs in seconds during facial verification and check if real user face match identity valification doc face image .
 
-We can easily add Face Liveness to the React web, native iOS, and native Android applications using open-source AWS Amplify SDKs.Face Liveness uses ML models trained on diverse datasets to support high accuracy across user skin tones, ancestries, and devices.
 
 ## Architecture
 
-![RekognitionLivenessArchitectureDeveloperGuide_v2.jpg](https://docs.aws.amazon.com/images/rekognition/latest/dg/images/RekognitionLivenessArchitectureDeveloperGuide_v2.jpg)
+![Architetcture](./architecture.png)
 
 ## Components
 Face Liveness uses multiple components:
@@ -18,14 +16,6 @@ Face Liveness uses multiple components:
 * AWS SDKs
 * AWS Cloud APIs
 
-
-When we configure our application to integrate with Face Liveness feature, it uses the following API operations:
-
-* CreateFaceLivenessSession - Starts a Face Liveness session, letting the Face Liveness detection model be used in your application. Returns a SessionId for the created session.
-
-* StartFaceLivenessSession - Called by the AWS Amplify FaceLivenessDetector. Starts an event stream containing information about relevant events and attributes in the current session.
-
-* GetFaceLivenessSessionResults - Retrieves the results of a specific Face Liveness session, including a Face Liveness confidence score, reference image, and audit images.
 
 ## Prerequisites
 
@@ -37,15 +27,16 @@ aws configure
 
 Locally installing on a workstation requires the following steps. 
 
+1. Locally install [Docker](https://www.docker.com/ja-jp/)
 1. Locally install AWS CDK as the [official documentation](https://docs.aws.amazon.com/cdk/latest/guide/getting_started.html) describes.
-2. [Bootstrap CDK for AWS Account](https://github.com/aws/aws-cdk/blob/master/design/cdk-bootstrap.md) 
-3. Install Python >=3.6 from [python.org](http://python.org/)
-4. Create a Python virtual environment
+1. [Bootstrap CDK for AWS Account](https://github.com/aws/aws-cdk/blob/master/design/cdk-bootstrap.md) 
+1. Install Python >=3.6 from [python.org](http://python.org/)
+1. Create a Python virtual environment
   ```sh
   python3 -m venv .venv                                      
   ```
 
-5. Activate virtual environment
+1. Activate virtual environment
   On MacOS or Linux
   ```sh
   source .venv/bin/activate                                       
@@ -103,6 +94,7 @@ npm start
 
 
 - [infra](infra).  CDK Automation for provisioning the environment(s)
+  - [cropface](infra/cropface/).  detectface and crop face image backend triggered by  identity verification doc image upload
   - [facelivenessbackend](infra/facelivenessbackend/).  The RFL backend
   - [frontend](infra/frontend/). React Frontend Web App infra for Amazon Rekognition Face Liveness
 - [src](src).  The backing code for Lambdas functions and other compute constructs
