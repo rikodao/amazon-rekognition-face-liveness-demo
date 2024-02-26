@@ -41,6 +41,9 @@ export default ({ image, setImage, sessionid }) => {
             <SelectField
                 label="Select your camera device"
                 value={deviceId.deviceId}
+                onClick={() => {
+                    navigator.mediaDevices.enumerateDevices().then(handleDevices);
+                }}
                 onChange={(e) => {
                     setDeviceId({...videoConstraints, deviceId: e.target.value})
             }}
